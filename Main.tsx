@@ -14,6 +14,22 @@ interface BState {
     F_RCDisconnect: boolean;
     F_GPSDisconnect: boolean;
     FlyMode: string;
+
+    CHARTDEBUG1_1: number;
+    CHARTDEBUG1_2: number;
+    CHARTDEBUG1_3: number;
+    CHARTDEBUG1_4: number;
+    CHARTDEBUG2_1: number;
+    CHARTDEBUG2_2: number;
+    CHARTDEBUG2_3: number;
+    CHARTDEBUG3_1: number;
+    CHARTDEBUG3_2: number;
+    CHARTDEBUG3_3: number;
+    CHARTDEBUG4_1: number;
+    CHARTDEBUG4_2: number;
+    CHARTDEBUG4_3: number;
+    CHARTDEBUG5_1: number;
+    CHARTDEBUG5_2: number;
 }
 
 class Body extends React.Component<BProps, BState> {
@@ -25,6 +41,8 @@ class Body extends React.Component<BProps, BState> {
     myChartDEBUG1: EchartShowSys;
     myChartDEBUG2: EchartShowSys;
     myChartDEBUG3: EchartShowSys;
+    myChartDEBUG4: EchartShowSys;
+    myChartDEBUG5: EchartShowSys;
     timerID: NodeJS.Timeout;
     rcoption = {
         xAxis: {
@@ -83,10 +101,10 @@ class Body extends React.Component<BProps, BState> {
         },
         yAxis: {
             max: function (value) {
-                return value.max + 0.2
+                return value.max + 50
             },
             min: function (value) {
-                return value.min - 0.2
+                return value.min - 50
             },
             name: 'Altitude',
             type: 'value',
@@ -148,7 +166,22 @@ class Body extends React.Component<BProps, BState> {
             F_GPSDisconnect: true,
             F_RCDisconnect: true,
             FlyMode: "AutoStable",
-        };
+            CHARTDEBUG1_1: 0,
+            CHARTDEBUG1_2: 0,
+            CHARTDEBUG1_3: 0,
+            CHARTDEBUG1_4: 0,
+            CHARTDEBUG2_1: 0,
+            CHARTDEBUG2_2: 0,
+            CHARTDEBUG2_3: 0,
+            CHARTDEBUG3_1: 0,
+            CHARTDEBUG3_2: 0,
+            CHARTDEBUG3_3: 0,
+            CHARTDEBUG4_1: 0,
+            CHARTDEBUG4_2: 0,
+            CHARTDEBUG4_3: 0,
+            CHARTDEBUG5_1: 0,
+            CHARTDEBUG5_2: 0,
+        }
     }
 
     public render(): JSX.Element {
@@ -168,15 +201,19 @@ class Body extends React.Component<BProps, BState> {
                 <div id="chartAreaGryo" style={this.chartCSS}></div>
                 <div>AccelAngle</div>
                 <div id="chartAreaAccel" style={this.chartCSS}></div>
+                <div id="chartAreaAlt" style={this.altCSS}></div>
+                <div>DEBUG1_{this.state.CHARTDEBUG1_1}_{this.state.CHARTDEBUG1_2}_{this.state.CHARTDEBUG1_3}_{this.state.CHARTDEBUG1_4}</div>
+                <div id="chartAreaDEBUG1" style={this.chartCSS}></div>
+                <div>DEBUG2_{this.state.CHARTDEBUG2_1}_{this.state.CHARTDEBUG2_2}_{this.state.CHARTDEBUG2_3}</div>
+                <div id="chartAreaDEBUG2" style={this.chartCSS}></div>
+                <div>DEBUG3_{this.state.CHARTDEBUG3_1}_{this.state.CHARTDEBUG3_2}</div>
+                <div id="chartAreaDEBUG3" style={this.chartCSS}></div>
+                <div>DEBUG4_{this.state.CHARTDEBUG4_1}_{this.state.CHARTDEBUG4_2}_{this.state.CHARTDEBUG4_3}</div>
+                <div id="chartAreaDEBUG4" style={this.chartCSS}></div>
+                <div>DEBUG5_{this.state.CHARTDEBUG5_1}_{this.state.CHARTDEBUG5_2}</div>
+                <div id="chartAreaDEBUG5" style={this.chartCSS}></div>
                 <div>RCInput</div>
                 <div id="chartAreaRC" style={this.chartCSS}></div>
-                <div id="chartAreaAlt" style={this.altCSS}></div>
-                <div>DEBUG1</div>
-                <div id="chartAreaDEBUG1" style={this.chartCSS}></div>
-                <div>DEBUG2</div>
-                <div id="chartAreaDEBUG2" style={this.chartCSS}></div>
-                <div>DEBUG3</div>
-                <div id="chartAreaDEBUG3" style={this.chartCSS}></div>
             </>
         )
     }
@@ -192,6 +229,8 @@ class Body extends React.Component<BProps, BState> {
         this.myChartDEBUG1 = new EchartShowSys(document.getElementById("chartAreaDEBUG1"), "DEBUGOuput", { ymax: (value) => { return value.max + 200 }, ymin: (value) => { return value.min - 200 } });
         this.myChartDEBUG2 = new EchartShowSys(document.getElementById("chartAreaDEBUG2"), "DEBUGOuput", { ymax: (value) => { return value.max + 200 }, ymin: (value) => { return value.min - 200 } });
         this.myChartDEBUG3 = new EchartShowSys(document.getElementById("chartAreaDEBUG3"), "DEBUGOuput", { ymax: (value) => { return value.max + 20 }, ymin: (value) => { return value.min - 20 } });
+        this.myChartDEBUG4 = new EchartShowSys(document.getElementById("chartAreaDEBUG4"), "DEBUGOuput", { ymax: (value) => { return value.max + 5 }, ymin: (value) => { return value.min - 5 } });
+        this.myChartDEBUG5 = new EchartShowSys(document.getElementById("chartAreaDEBUG5"), "DEBUGOuput", { ymax: (value) => { return value.max + 5 }, ymin: (value) => { return value.min - 5 } });
         //
         this.myChartReal.EhcartSeriesAdd({
             name: 'Charts',
@@ -327,14 +366,46 @@ class Body extends React.Component<BProps, BState> {
             data: new Array(200),
             lineStyle: { color: 'blue' }
         });
-        // this.myChartDEBUG3.EhcartSeriesAdd({
-        //     name: 'Charts',
-        //     type: 'line',
-        //     showSymbol: false,
-        //     hoverAnimation: false,
-        //     data: new Array(200),
-        //     lineStyle: { color: 'green' }
-        // });
+        this.myChartDEBUG3.EhcartSeriesAdd({
+            name: 'Charts',
+            type: 'line',
+            showSymbol: false,
+            hoverAnimation: false,
+            data: new Array(200),
+            lineStyle: { color: 'green' }
+        });
+        this.myChartDEBUG4.EhcartSeriesAdd({
+            name: 'Charts',
+            type: 'line',
+            showSymbol: false,
+            hoverAnimation: false,
+            data: new Array(200),
+            lineStyle: { color: 'red' }
+        });
+        this.myChartDEBUG4.EhcartSeriesAdd({
+            name: 'Charts',
+            type: 'line',
+            showSymbol: false,
+            hoverAnimation: false,
+            data: new Array(200),
+            lineStyle: { color: 'blue' }
+        });
+        this.myChartDEBUG5.EhcartSeriesAdd({
+            name: 'Charts',
+            type: 'line',
+            showSymbol: false,
+            hoverAnimation: false,
+            data: new Array(200),
+            lineStyle: { color: 'red' }
+        });
+        this.myChartDEBUG5.EhcartSeriesAdd({
+            name: 'Charts',
+            type: 'line',
+            showSymbol: false,
+            hoverAnimation: false,
+            data: new Array(200),
+            lineStyle: { color: 'blue' }
+        });
         //
         this.timerID = setInterval(() => {
             this.myChartReal.EchartsDataAdd(parseInt(myServer.JSONData.RealPitch), 1);
@@ -350,8 +421,8 @@ class Body extends React.Component<BProps, BState> {
             this.rcoption.series[0].data[2] = (this.rcoption.series[0].data[2] - 1500)
             this.rcoption.series[0].data[3] = parseInt(myServer.JSONData.RCYaw);
             this.myChartRC.CustomOptionSet(this.rcoption);
-            this.altoption.series[0].data[0] = parseInt(myServer.JSONData.FinalPressure) / 100;
-            this.altoption.series[0].data[1] = parseInt(myServer.JSONData.HoldPressure) / 100;
+            this.altoption.series[0].data[0] = parseInt(myServer.JSONData.MovementZ);
+            this.altoption.series[0].data[1] = parseInt(myServer.JSONData.DiffAlttitude);
             this.myChartAlt.CustomOptionSet(this.altoption);
             this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawADFY), 1);
             this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawFAY), 2);
@@ -360,16 +431,22 @@ class Body extends React.Component<BProps, BState> {
             this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAX), 1);
             this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAY), 2);
             this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAZ), 3);
-            // this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.AccelX), 1);
-            // this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.AccelY), 2);
             this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.SpeedZ), 1);
             this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.ClimbeRate), 2);
+            this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.AltThrottle), 3);
+            this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.MovementZ), 1);
+            this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.DiffAlttitude), 2);
+            this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutX), 1);
+            this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutY), 2);
             //
             this.setState({
                 F_Error: myServer.JSONData.F_Error,
                 F_ESCARM: myServer.JSONData.F_ESCARM,
                 F_GPSDisconnect: myServer.JSONData.F_GPSDisconnect,
                 F_RCDisconnect: myServer.JSONData.F_RCDisconnect,
+                CHARTDEBUG3_1: parseInt(myServer.JSONData.SpeedZ),
+                CHARTDEBUG3_2: parseInt(myServer.JSONData.ClimbeRate),
+                CHARTDEBUG3_3: parseInt(myServer.JSONData.AltThrottle),
             });
             if (myServer.JSONData.flyMode == 2) {
                 this.setState({ FlyMode: "AutoStable" })

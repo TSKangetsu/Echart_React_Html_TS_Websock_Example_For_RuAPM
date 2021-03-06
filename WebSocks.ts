@@ -1,5 +1,5 @@
 export class NetServerMain {
-    JSONData: any;
+    JSONData: any = { "null": "null" };
     private serverMain: WebSocket;
     private SendClock: NodeJS.Timeout;
     RemotePortList: Array<number> = new Array<number>();
@@ -51,7 +51,7 @@ export class NetServerMain {
         };
         if (DataExe.slice(0, 4) == "4200") {
             let TmpBuffer: string[] = this.SearchAllMatch_str(DataExe.toString());
-            console.log(TmpBuffer);
+            // console.log(TmpBuffer);
             this.JSONData = JSON.parse(TmpBuffer[2]);
         }
     }

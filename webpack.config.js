@@ -3,6 +3,7 @@ module.exports = {
     target: 'web',
     entry: './Main.tsx',
     mode: 'development',
+    // mode: "production",
     resolve: {
         extensions: [".js", ".jsx", ".ts", ".tsx"],
     },
