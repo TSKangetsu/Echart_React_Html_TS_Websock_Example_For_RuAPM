@@ -30,6 +30,17 @@ interface BState {
     CHARTDEBUG4_3: number;
     CHARTDEBUG5_1: number;
     CHARTDEBUG5_2: number;
+
+    RealAngleEnable: boolean;
+    GryoAngleEnable: boolean;
+    AccelAngleEnable: boolean;
+    AltEnable: boolean;
+    DEBUG1Enable: boolean;
+    DEBUG2Enable: boolean;
+    DEBUG3Enable: boolean;
+    DEBUG4Enable: boolean;
+    DEBUG5Enable: boolean;
+    RCEnable: boolean
 }
 
 class Body extends React.Component<BProps, BState> {
@@ -181,12 +192,65 @@ class Body extends React.Component<BProps, BState> {
             CHARTDEBUG4_3: 0,
             CHARTDEBUG5_1: 0,
             CHARTDEBUG5_2: 0,
+            RealAngleEnable: true,
+            GryoAngleEnable: true,
+            AccelAngleEnable: true,
+            AltEnable: true,
+            DEBUG1Enable: true,
+            DEBUG2Enable: true,
+            DEBUG3Enable: true,
+            DEBUG4Enable: true,
+            DEBUG5Enable: true,
+            RCEnable: true,
         }
+        this.checkBoxHandle = this.checkBoxHandle.bind(this);
     }
 
     public render(): JSX.Element {
         return (
             <>
+                <div>
+                    <label>
+                        RealAngle
+                        <input type="checkbox" value="RealAngle" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        AccelAngle
+                        <input type="checkbox" value="AccelAngle" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        GryoAngle
+                        <input type="checkbox" value="GryoAngle" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        Alt
+                        <input type="checkbox" value="Alt" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        RC
+                        <input type="checkbox" value="RC" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        Debug1
+                        <input type="checkbox" value="Debug1" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        Debug2
+                        <input type="checkbox" value="Debug2" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        Debug3
+                        <input type="checkbox" value="Debug3" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        Debug4
+                        <input type="checkbox" value="Debug4" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        Debug5
+                        <input type="checkbox" value="Debug5" onChange={this.checkBoxHandle} />
+                    </label>
+                </div>
                 <div id="flyingStatus" style={this.statusCSS}>
                     <h4>ESC is ARM : {String(this.state.F_ESCARM)}</h4>
                     <h4>Controller is Error : {String(this.state.F_Error)}</h4>
@@ -195,27 +259,151 @@ class Body extends React.Component<BProps, BState> {
                     <h4>FlyMode: {this.state.FlyMode}</h4>
                 </div>
 
-                <div>RealAngle</div>
-                <div id="chartAreaReal" style={this.chartCSS}></div>
-                <div>GryoAngle</div>
-                <div id="chartAreaGryo" style={this.chartCSS}></div>
-                <div>AccelAngle</div>
-                <div id="chartAreaAccel" style={this.chartCSS}></div>
-                <div id="chartAreaAlt" style={this.altCSS}></div>
-                <div>DEBUG1_{this.state.CHARTDEBUG1_1}_{this.state.CHARTDEBUG1_2}_{this.state.CHARTDEBUG1_3}_{this.state.CHARTDEBUG1_4}</div>
-                <div id="chartAreaDEBUG1" style={this.chartCSS}></div>
-                <div>DEBUG2_{this.state.CHARTDEBUG2_1}_{this.state.CHARTDEBUG2_2}_{this.state.CHARTDEBUG2_3}</div>
-                <div id="chartAreaDEBUG2" style={this.chartCSS}></div>
-                <div>DEBUG3_{this.state.CHARTDEBUG3_1}_{this.state.CHARTDEBUG3_2}</div>
-                <div id="chartAreaDEBUG3" style={this.chartCSS}></div>
-                <div>DEBUG4_{this.state.CHARTDEBUG4_1}_{this.state.CHARTDEBUG4_2}_{this.state.CHARTDEBUG4_3}</div>
-                <div id="chartAreaDEBUG4" style={this.chartCSS}></div>
-                <div>DEBUG5_{this.state.CHARTDEBUG5_1}_{this.state.CHARTDEBUG5_2}</div>
-                <div id="chartAreaDEBUG5" style={this.chartCSS}></div>
-                <div>RCInput</div>
-                <div id="chartAreaRC" style={this.chartCSS}></div>
+                {this.state.RealAngleEnable
+                    ? <><div>RealAngle</div><div id="chartAreaReal" style={this.chartCSS}></div></>
+                    : <><div id="chartAreaReal"></div></>
+                }
+
+                {
+                    this.state.GryoAngleEnable
+                        ? <><div>GryoAngle</div><div id="chartAreaGryo" style={this.chartCSS}></div></>
+                        : <><div id="chartAreaGryo" style={{ display: "none" }}></div></>
+                }
+                {
+                    this.state.AccelAngleEnable
+                        ? <><div>AccelAngle</div><div id="chartAreaAccel" style={this.chartCSS}></div></>
+                        : <><div id="chartAreaAccel" style={{ display: "none" }}></div></>
+                }
+                {
+                    this.state.AltEnable
+                        ? <div id="chartAreaAlt" style={this.altCSS}></div>
+                        : <><div id="chartAreaAlt" style={{ display: "none" }}></div></>
+                }
+                {
+                    this.state.DEBUG1Enable
+                        ? <><div>DEBUG1_{this.state.CHARTDEBUG1_1}_{this.state.CHARTDEBUG1_2}_{this.state.CHARTDEBUG1_3}_{this.state.CHARTDEBUG1_4}</div>
+                            <div id="chartAreaDEBUG1" style={this.chartCSS}></div></>
+                        : <><div id="chartAreaDEBUG1" style={{ display: "none" }}></div></>
+                }
+
+                {
+                    this.state.DEBUG2Enable
+                        ? <><div>DEBUG2_{this.state.CHARTDEBUG2_1}_{this.state.CHARTDEBUG2_2}_{this.state.CHARTDEBUG2_3}</div>
+                            <div id="chartAreaDEBUG2" style={this.chartCSS}></div></>
+                        : <><div id="chartAreaDEBUG2" style={{ display: "none" }}></div></>
+                }
+                {
+                    this.state.DEBUG3Enable
+                        ? <><div>DEBUG3_{this.state.CHARTDEBUG3_1}_{this.state.CHARTDEBUG3_2}</div>
+                            <div id="chartAreaDEBUG3" style={this.chartCSS}></div></>
+                        : <><div id="chartAreaDEBUG3" style={{ display: "none" }}></div></>
+                }
+                {
+                    this.state.DEBUG4Enable
+                        ? <><div>DEBUG4_{this.state.CHARTDEBUG4_1}_{this.state.CHARTDEBUG4_2}_{this.state.CHARTDEBUG4_3}</div>
+                            <div id="chartAreaDEBUG4" style={this.chartCSS}></div></>
+                        : <><div id="chartAreaDEBUG4" style={{ display: "none" }}></div></>
+                }
+                {
+                    this.state.DEBUG5Enable
+                        ? <>
+                            <div>DEBUG5_{this.state.CHARTDEBUG5_1}_{this.state.CHARTDEBUG5_2}</div>
+                            <div id="chartAreaDEBUG5" style={this.chartCSS}></div></>
+                        : <><div id="chartAreaDEBUG5" style={{ display: "none" }}></div></>
+                }
+                {
+                    this.state.RCEnable
+                        ? <>
+                            <div>RCInput</div>
+                            <div id="chartAreaRC" style={this.chartCSS}></div></>
+                        : <><div id="chartAreaRC" style={{ display: "none" }}></div></>
+                }
             </>
         )
+    }
+
+    checkBoxHandle(event: React.ChangeEvent<HTMLInputElement>) {
+        if (event.target.value == "RealAngle") {
+            if (event.target.checked) {
+                this.setState({ RealAngleEnable: true })
+            }
+            else {
+                this.setState({ RealAngleEnable: false })
+            }
+        }
+        else if (event.target.value == "AccelAngle") {
+            if (event.target.checked) {
+                this.setState({ AccelAngleEnable: true })
+            }
+            else {
+                this.setState({ AccelAngleEnable: false })
+            }
+        }
+        else if (event.target.value == "GryoAngle") {
+            if (event.target.checked) {
+                this.setState({ GryoAngleEnable: true })
+            }
+            else {
+                this.setState({ GryoAngleEnable: false })
+            }
+        }
+        else if (event.target.value == "Alt") {
+            if (event.target.checked) {
+                this.setState({ AltEnable: true })
+            }
+            else {
+                this.setState({ AltEnable: false })
+            }
+        }
+        else if (event.target.value == "RC") {
+            if (event.target.checked) {
+                this.setState({ RCEnable: true })
+            }
+            else {
+                this.setState({ RCEnable: false })
+            }
+        }
+        else if (event.target.value == "Debug1") {
+            if (event.target.checked) {
+                this.setState({ DEBUG1Enable: true })
+            }
+            else {
+                this.setState({ DEBUG1Enable: false })
+            }
+        }
+        else if (event.target.value == "Debug2") {
+            if (event.target.checked) {
+                this.setState({ DEBUG2Enable: true })
+            }
+            else {
+                this.setState({ DEBUG2Enable: false })
+            }
+        }
+        else if (event.target.value == "Debug3") {
+            if (event.target.checked) {
+                this.setState({ DEBUG3Enable: true })
+            }
+            else {
+                this.setState({ DEBUG3Enable: false })
+            }
+        }
+        else if (event.target.value == "Debug4") {
+            if (event.target.checked) {
+                this.setState({ DEBUG4Enable: true })
+            }
+            else {
+                this.setState({ DEBUG4Enable: false })
+            }
+        }
+        else if (event.target.value == "Debug5") {
+            if (event.target.checked) {
+                this.setState({ DEBUG5Enable: true })
+            }
+            else {
+                this.setState({ DEBUG5Enable: false })
+            }
+        }
+
     }
 
     componentDidMount() {
@@ -232,212 +420,249 @@ class Body extends React.Component<BProps, BState> {
         this.myChartDEBUG4 = new EchartShowSys(document.getElementById("chartAreaDEBUG4"), "DEBUGOuput", { ymax: (value) => { return value.max + 5 }, ymin: (value) => { return value.min - 5 } });
         this.myChartDEBUG5 = new EchartShowSys(document.getElementById("chartAreaDEBUG5"), "DEBUGOuput", { ymax: (value) => { return value.max + 5 }, ymin: (value) => { return value.min - 5 } });
         //
-        this.myChartReal.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'red' }
-        });
-        this.myChartReal.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'blue' }
-        });
+        if (this.state.RealAngleEnable) {
+            this.myChartReal.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'red' }
+            });
+            this.myChartReal.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'blue' }
+            });
+        }
         //
-        this.myChartGryo.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'red' }
-        });
-        this.myChartGryo.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'blue' }
-        });
-        this.myChartGryo.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'green' }
-        });
+        if (this.state.GryoAngleEnable) {
+            this.myChartGryo.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'red' }
+            });
+            this.myChartGryo.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'blue' }
+            });
+            this.myChartGryo.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'green' }
+            });
+        }
         //
-        this.myChartAccel.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'red' }
-        });
-        this.myChartAccel.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'blue' }
-        });
+        if (this.state.AccelAngleEnable) {
+            this.myChartAccel.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'red' }
+            });
+            this.myChartAccel.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'blue' }
+            });
+        }
         //
-        this.myChartDEBUG1.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'red' }
-        });
-        this.myChartDEBUG1.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'blue' }
-        });
-        this.myChartDEBUG1.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'yellow' }
-        });
-        this.myChartDEBUG1.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'green' }
-        });
+        if (this.state.DEBUG1Enable) {
+            this.myChartDEBUG1.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'red' }
+            });
+            this.myChartDEBUG1.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'blue' }
+            });
+            this.myChartDEBUG1.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'yellow' }
+            });
+            this.myChartDEBUG1.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'green' }
+            });
+        }
+        //
+        if (this.state.DEBUG2Enable) {
+            this.myChartDEBUG2.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'red' }
+            });
+            this.myChartDEBUG2.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'blue' }
+            });
+            this.myChartDEBUG2.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'green' }
+            });
+        }
+        //
+        if (this.state.DEBUG3Enable) {
+            this.myChartDEBUG3.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'red' }
+            });
+            this.myChartDEBUG3.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'blue' }
+            });
+            this.myChartDEBUG3.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'green' }
+            });
+        }
+        //
+        if (this.state.DEBUG4Enable) {
+            this.myChartDEBUG4.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'red' }
+            });
+            this.myChartDEBUG4.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'blue' }
+            });
+        }
+        //
+        if (this.state.DEBUG5Enable) {
+            this.myChartDEBUG5.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'red' }
+            });
+            this.myChartDEBUG5.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'blue' }
+            });
+        }
 
-        //
-        this.myChartDEBUG2.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'red' }
-        });
-        this.myChartDEBUG2.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'blue' }
-        });
-        this.myChartDEBUG2.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'green' }
-        });
-        //
-        this.myChartDEBUG3.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'red' }
-        });
-        this.myChartDEBUG3.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'blue' }
-        });
-        this.myChartDEBUG3.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'green' }
-        });
-        this.myChartDEBUG4.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'red' }
-        });
-        this.myChartDEBUG4.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'blue' }
-        });
-        this.myChartDEBUG5.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'red' }
-        });
-        this.myChartDEBUG5.EhcartSeriesAdd({
-            name: 'Charts',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: new Array(200),
-            lineStyle: { color: 'blue' }
-        });
-        //
         this.timerID = setInterval(() => {
-            this.myChartReal.EchartsDataAdd(parseInt(myServer.JSONData.RealPitch), 1);
-            this.myChartReal.EchartsDataAdd(parseInt(myServer.JSONData.RealRoll), 2);
-            this.myChartGryo.EchartsDataAdd(parseInt(myServer.JSONData.GRYOPitch), 1);
-            this.myChartGryo.EchartsDataAdd(parseInt(myServer.JSONData.GRYORoll), 2);
-            this.myChartGryo.EchartsDataAdd(parseInt(myServer.JSONData.GRYOYaw), 3);
-            this.myChartAccel.EchartsDataAdd(parseInt(myServer.JSONData.AccelPitch), 1);
-            this.myChartAccel.EchartsDataAdd(parseInt(myServer.JSONData.AccelRoll), 2);
-            this.rcoption.series[0].data[0] = parseInt(myServer.JSONData.RCPitch);
-            this.rcoption.series[0].data[1] = parseInt(myServer.JSONData.RCRoll);
-            this.rcoption.series[0].data[2] = parseInt(myServer.JSONData.RCThrottle);
-            this.rcoption.series[0].data[2] = (this.rcoption.series[0].data[2] - 1500)
-            this.rcoption.series[0].data[3] = parseInt(myServer.JSONData.RCYaw);
-            this.myChartRC.CustomOptionSet(this.rcoption);
-            this.altoption.series[0].data[0] = parseInt(myServer.JSONData.MovementZ);
-            this.altoption.series[0].data[1] = parseInt(myServer.JSONData.DiffAlttitude);
-            this.myChartAlt.CustomOptionSet(this.altoption);
-            this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawADFY), 1);
-            this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawFAY), 2);
-            this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawADFZ) - 4096, 3);
-            this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawFAZ) - 4096, 4);
-            this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAX), 1);
-            this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAY), 2);
-            this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAZ), 3);
-            this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.SpeedZ), 1);
-            this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.ClimbeRate), 2);
-            this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.AltThrottle), 3);
-            this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.MovementZ), 1);
-            this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.DiffAlttitude), 2);
-            this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutX), 1);
-            this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutY), 2);
+            if (this.state.RealAngleEnable) {
+                this.myChartReal.EchartsDataAdd(parseInt(myServer.JSONData.RealPitch), 1);
+                this.myChartReal.EchartsDataAdd(parseInt(myServer.JSONData.RealRoll), 2);
+            }
+            if (this.state.GryoAngleEnable) {
+                this.myChartGryo.EchartsDataAdd(parseInt(myServer.JSONData.GRYOPitch), 1);
+                this.myChartGryo.EchartsDataAdd(parseInt(myServer.JSONData.GRYORoll), 2);
+                this.myChartGryo.EchartsDataAdd(parseInt(myServer.JSONData.GRYOYaw), 3);
+            }
+            if (this.state.AccelAngleEnable) {
+                this.myChartAccel.EchartsDataAdd(parseInt(myServer.JSONData.AccelPitch), 1);
+                this.myChartAccel.EchartsDataAdd(parseInt(myServer.JSONData.AccelRoll), 2);
+            }
+            if (this.state.RCEnable) {
+                this.rcoption.series[0].data[0] = parseInt(myServer.JSONData.RCPitch);
+                this.rcoption.series[0].data[1] = parseInt(myServer.JSONData.RCRoll);
+                this.rcoption.series[0].data[2] = parseInt(myServer.JSONData.RCThrottle);
+                this.rcoption.series[0].data[2] = (this.rcoption.series[0].data[2] - 1500)
+                this.rcoption.series[0].data[3] = parseInt(myServer.JSONData.RCYaw);
+                this.myChartRC.CustomOptionSet(this.rcoption);
+            }
+            if (this.state.AltEnable) {
+                this.altoption.series[0].data[0] = parseInt(myServer.JSONData.MovementZ);
+                this.altoption.series[0].data[1] = parseInt(myServer.JSONData.DiffAlttitude);
+                this.myChartAlt.CustomOptionSet(this.altoption);
+            }
+            if (this.state.DEBUG1Enable) {
+                this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawADFY), 1);
+                this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawFAY), 2);
+                this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawADFZ) - 4096, 3);
+                this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawFAZ) - 4096, 4);
+            }
+            if (this.state.DEBUG2Enable) {
+                this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAX), 1);
+                this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAY), 2);
+                this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAZ), 3);
+            }
+            if (this.state.DEBUG3Enable) {
+                this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.SpeedZ), 1);
+                this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.ClimbeRate), 2);
+                this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.AltThrottle), 3);
+            }
+            if (this.state.DEBUG4Enable) {
+                this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.MovementZ), 1);
+                this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.DiffAlttitude), 2);
+            }
+            if (this.state.DEBUG5Enable) {
+                this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutX), 1);
+                this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutY), 2);
+            }
             //
             this.setState({
                 F_Error: myServer.JSONData.F_Error,
@@ -457,7 +682,7 @@ class Body extends React.Component<BProps, BState> {
             if (myServer.JSONData.flyMode == 3) {
                 this.setState({ FlyMode: "PositionHold" })
             }
-        }, 50)
+        }, 100)
     }
 }
 
