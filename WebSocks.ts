@@ -31,7 +31,7 @@ export class NetServerMain {
         this.serverMain.onopen = (event) => {
             this.SendClock = setInterval(() => {
                 this.serverMain.send("4350");
-            }, 50);
+            }, 10);
         };
         this.serverMain.onmessage = (event) => {
             this.PreDataExend(<string><unknown>event.data, this.serverMain);

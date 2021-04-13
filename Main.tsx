@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom'
 import { EchartShowSys } from './EchartsShow';
 import { NetServerMain } from './WebSocks'
 
-let myServer: NetServerMain = new NetServerMain(27015, "192.168.137.24");
+let myServer: NetServerMain = new NetServerMain(27015, "192.168.137.89");
 
 interface BProps {
 }
@@ -40,6 +40,7 @@ interface BState {
     DEBUG3Enable: boolean;
     DEBUG4Enable: boolean;
     DEBUG5Enable: boolean;
+    DEBUG6Enable: boolean;
     RCEnable: boolean
 }
 
@@ -54,6 +55,7 @@ class Body extends React.Component<BProps, BState> {
     myChartDEBUG3: EchartShowSys;
     myChartDEBUG4: EchartShowSys;
     myChartDEBUG5: EchartShowSys;
+    myChartDEBUG6: EchartShowSys;
     timerID: NodeJS.Timeout;
     rcoption = {
         xAxis: {
@@ -201,6 +203,7 @@ class Body extends React.Component<BProps, BState> {
             DEBUG3Enable: true,
             DEBUG4Enable: true,
             DEBUG5Enable: true,
+            DEBUG6Enable: true,
             RCEnable: true,
         }
         this.checkBoxHandle = this.checkBoxHandle.bind(this);
@@ -249,6 +252,10 @@ class Body extends React.Component<BProps, BState> {
                     <label>
                         Debug5
                         <input type="checkbox" value="Debug5" onChange={this.checkBoxHandle} />
+                    </label>
+                    <label>
+                        Debug6
+                        <input type="checkbox" value="Debug6" onChange={this.checkBoxHandle} />
                     </label>
                 </div>
                 <div id="flyingStatus" style={this.statusCSS}>
@@ -310,6 +317,13 @@ class Body extends React.Component<BProps, BState> {
                             <div>DEBUG5_{this.state.CHARTDEBUG5_1}_{this.state.CHARTDEBUG5_2}</div>
                             <div id="chartAreaDEBUG5" style={this.chartCSS}></div></>
                         : <><div id="chartAreaDEBUG5" style={{ display: "none" }}></div></>
+                }
+                {
+                    this.state.DEBUG6Enable
+                        ? <>
+                            <div>DEBUG6_</div>
+                            <div id="chartAreaDEBUG6" style={this.chartCSS}></div></>
+                        : <><div id="chartAreaDEBUG6" style={{ display: "none" }}></div></>
                 }
                 {
                     this.state.RCEnable
@@ -403,7 +417,14 @@ class Body extends React.Component<BProps, BState> {
                 this.setState({ DEBUG5Enable: false })
             }
         }
-
+        else if (event.target.value == "Debug6") {
+            if (event.target.checked) {
+                this.setState({ DEBUG6Enable: true })
+            }
+            else {
+                this.setState({ DEBUG6Enable: false })
+            }
+        }
     }
 
     componentDidMount() {
@@ -419,6 +440,7 @@ class Body extends React.Component<BProps, BState> {
         this.myChartDEBUG3 = new EchartShowSys(document.getElementById("chartAreaDEBUG3"), "DEBUGOuput", { ymax: (value) => { return value.max + 20 }, ymin: (value) => { return value.min - 20 } });
         this.myChartDEBUG4 = new EchartShowSys(document.getElementById("chartAreaDEBUG4"), "DEBUGOuput", { ymax: (value) => { return value.max + 5 }, ymin: (value) => { return value.min - 5 } });
         this.myChartDEBUG5 = new EchartShowSys(document.getElementById("chartAreaDEBUG5"), "DEBUGOuput", { ymax: (value) => { return value.max + 5 }, ymin: (value) => { return value.min - 5 } });
+        this.myChartDEBUG6 = new EchartShowSys(document.getElementById("chartAreaDEBUG6"), "DEBUGOuput", { ymax: (value) => { return value.max + 5 }, ymin: (value) => { return value.min - 5 } });
         //
         if (this.state.RealAngleEnable) {
             this.myChartReal.EhcartSeriesAdd({
@@ -436,6 +458,22 @@ class Body extends React.Component<BProps, BState> {
                 hoverAnimation: false,
                 data: new Array(200),
                 lineStyle: { color: 'blue' }
+            });
+            this.myChartReal.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'green' }
+            });
+            this.myChartReal.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'black' }
             });
         }
         //
@@ -572,6 +610,14 @@ class Body extends React.Component<BProps, BState> {
                 data: new Array(200),
                 lineStyle: { color: 'green' }
             });
+            this.myChartDEBUG3.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'black' }
+            });
         }
         //
         if (this.state.DEBUG4Enable) {
@@ -590,6 +636,22 @@ class Body extends React.Component<BProps, BState> {
                 hoverAnimation: false,
                 data: new Array(200),
                 lineStyle: { color: 'blue' }
+            });
+            this.myChartDEBUG4.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'green' }
+            });
+            this.myChartDEBUG4.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'black' }
             });
         }
         //
@@ -610,12 +672,64 @@ class Body extends React.Component<BProps, BState> {
                 data: new Array(200),
                 lineStyle: { color: 'blue' }
             });
+            this.myChartDEBUG5.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'green' }
+            });
+            this.myChartDEBUG5.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'black' }
+            });
+        }
+        if (this.state.DEBUG6Enable) {
+            this.myChartDEBUG6.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'red' }
+            });
+            this.myChartDEBUG6.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'blue' }
+            });
+            this.myChartDEBUG6.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'green' }
+            });
+            this.myChartDEBUG6.EhcartSeriesAdd({
+                name: 'Charts',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(200),
+                lineStyle: { color: 'black' }
+            });
         }
 
         this.timerID = setInterval(() => {
             if (this.state.RealAngleEnable) {
                 this.myChartReal.EchartsDataAdd(parseInt(myServer.JSONData.RealPitch), 1);
                 this.myChartReal.EchartsDataAdd(parseInt(myServer.JSONData.RealRoll), 2);
+                this.myChartReal.EchartsDataAdd(parseInt(myServer.JSONData.PIDPitch), 3);
+                this.myChartReal.EchartsDataAdd(parseInt(myServer.JSONData.PIDRoll), 4);
             }
             if (this.state.GryoAngleEnable) {
                 this.myChartGryo.EchartsDataAdd(parseInt(myServer.JSONData.GRYOPitch), 1);
@@ -636,7 +750,7 @@ class Body extends React.Component<BProps, BState> {
             }
             if (this.state.AltEnable) {
                 this.altoption.series[0].data[0] = parseInt(myServer.JSONData.MovementZ);
-                this.altoption.series[0].data[1] = parseInt(myServer.JSONData.DiffAlttitude);
+                this.altoption.series[0].data[1] = parseInt(myServer.JSONData.TargetAlttitude);
                 this.myChartAlt.CustomOptionSet(this.altoption);
             }
             if (this.state.DEBUG1Enable) {
@@ -646,22 +760,33 @@ class Body extends React.Component<BProps, BState> {
                 this.myChartDEBUG1.EchartsDataAdd(parseInt(myServer.JSONData.RawFAZ) - 4096, 4);
             }
             if (this.state.DEBUG2Enable) {
-                this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAX), 1);
-                this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAY), 2);
-                this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.RawSAZ), 3);
+                this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.AccelX), 1);
+                this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.AccelY), 2);
+                this.myChartDEBUG2.EchartsDataAdd(parseInt(myServer.JSONData.AccelZ), 3);
             }
             if (this.state.DEBUG3Enable) {
                 this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.SpeedZ), 1);
                 this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.ClimbeRate), 2);
-                this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.AltThrottle), 3);
+                this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.SonarClimbeRate), 3);
+                this.myChartDEBUG3.EchartsDataAdd(parseInt(myServer.JSONData.EKFClimbeRate), 4);
             }
             if (this.state.DEBUG4Enable) {
                 this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.MovementZ), 1);
-                this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.DiffAlttitude), 2);
+                this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.PressureAlttitude), 2);
+                this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.SonarAltitude), 3);
+                this.myChartDEBUG4.EchartsDataAdd(parseInt(myServer.JSONData.EKFAltitude), 4);
             }
             if (this.state.DEBUG5Enable) {
                 this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutX), 1);
                 this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutY), 2);
+                this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutXAsix), 3);
+                this.myChartDEBUG5.EchartsDataAdd(parseInt(myServer.JSONData.FlowOutYAsix), 4);
+            }
+            if (this.state.DEBUG6Enable) {
+                this.myChartDEBUG6.EchartsDataAdd(parseInt(myServer.JSONData.FlowSpeedX), 1);
+                this.myChartDEBUG6.EchartsDataAdd(parseInt(myServer.JSONData.FlowSpeedY), 2);
+                this.myChartDEBUG6.EchartsDataAdd(parseInt(myServer.JSONData.SpeedX), 3);
+                this.myChartDEBUG6.EchartsDataAdd(parseInt(myServer.JSONData.SpeedY), 4);
             }
             //
             this.setState({
