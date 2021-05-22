@@ -2,6 +2,7 @@
     "configuration": [
         {
             "Name": "GryoChart",
+            "enable":false,
             "IsDynamicY": false,
             "YMax": 500,
             "YMin": -500,
@@ -29,19 +30,90 @@
             "height": 200
         },
         {
-            "Name": "RealAngle",
+            "Name": "AccelChart",
+            "enable":true,
             "IsDynamicY": true,
             "YMax": 5,
             "YMin": -5,
             "Index": {
-                "RealPitch": {
+                "AccelZ": {
                     "color": "red",
                     "type": "line",
                     "showSymbol": false,
                     "dataSize": 200
                 },
-                "RealRoll": {
+                "AccelX": {
                     "color": "blue",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                },
+                "AccelY": {
+                    "color": "green",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                }
+            },
+            "width": 700,
+            "height": 200
+        },
+        {
+            "Name": "SpeedChart",
+            "enable":true,
+            "IsDynamicY": true,
+            "YMax": 5,
+            "YMin": -5,
+            "Index": {
+                "SpeedZ": {
+                    "color": "red",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                },
+                "SpeedX": {
+                    "color": "blue",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                },
+                "SpeedY": {
+                    "color": "green",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                }
+            },
+            "width": 700,
+            "height": 200
+        },
+        {
+            "Name": "AltitudeChart",
+            "enable":false,
+            "IsDynamicY": true,
+            "YMax": 5,
+            "YMin": -5,
+            "Index": {
+                "MovementZ": {
+                    "color": "red",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                },
+                "TargetAlttitude": {
+                    "color": "blue",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                },
+                "PressureAlttitude": {
+                    "color": "green",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                },
+                "SonarAltitude": {
+                    "color": "black",
                     "type": "line",
                     "showSymbol": false,
                     "dataSize": 200

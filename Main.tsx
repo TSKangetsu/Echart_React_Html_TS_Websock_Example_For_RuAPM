@@ -44,7 +44,7 @@ class SoftController extends React.Component {
                         </div>
                     </div>
                 </nav>
-                <div id="ChartArea" className="mt-sm-1 mt-md-3 px-sm-0 px-md-1 row row-cols-1 row-cols-md-2"></div>
+                <div id="ChartArea" className="mt-sm-1 mt-md-3 px-1 mx-0 row"></div>
             </>
         )
     }
@@ -90,15 +90,17 @@ class ChartCreator extends React.Component<CCprops> {
 
     public render(): JSX.Element {
         ChartConfigAsJson.configuration.forEach(element => {
-            this.ChartAreaMain.push((
-                <>
-                    <div>
-                        <h6>{element.Name}</h6>
-                        <div className="px-0" id={element.Name} key={element.Name}
-                            style={{ height: element.height }}></div>
-                    </div>
-                </>
-            ))
+            if (element.enable) {
+                this.ChartAreaMain.push((
+                    <>
+                        <div className="px-0 col-sm-12 col-md-6">
+                            <h6>{element.Name}</h6>
+                            <div className="px-0" id={element.Name} key={element.Name}
+                                style={{ height: element.height }}></div>
+                        </div>
+                    </>
+                ))
+            }
         });
         return (
             <>
@@ -109,39 +111,43 @@ class ChartCreator extends React.Component<CCprops> {
 
     componentDidMount() {
         ChartConfigAsJson.configuration.forEach(element => {
-            var Charts: EchartShowSys;
-            Charts = new EchartShowSys(document.getElementById(element.Name), element.Name,
-                {
-                    ymax: element.IsDynamicY ? (value) => { return value.max + element.YMax } : element.YMax,
-                    ymin: element.IsDynamicY ? (value) => { return value.min + element.YMin } : element.YMin
+            if (element.enable) {
+                var Charts: EchartShowSys;
+                Charts = new EchartShowSys(document.getElementById(element.Name), element.Name,
+                    {
+                        ymax: element.IsDynamicY ? (value) => { return value.max + element.YMax } : element.YMax,
+                        ymin: element.IsDynamicY ? (value) => { return value.min + element.YMin } : element.YMin
+                    });
+                Object.keys(element.Index).forEach(key => {
+                    Charts.EhcartSeriesAdd({
+                        name: key,
+                        hoverAnimation: false,
+                        type: element.Index[key].type,
+                        showSymbol: element.Index[key].showSymbol,
+                        data: new Array(element.Index[key].dataSize),
+                        lineStyle: { color: element.Index[key].color }
+                    });
                 });
-            Object.keys(element.Index).forEach(key => {
-                Charts.EhcartSeriesAdd({
-                    name: key,
-                    hoverAnimation: false,
-                    type: element.Index[key].type,
-                    showSymbol: element.Index[key].showSymbol,
-                    data: new Array(element.Index[key].dataSize),
-                    lineStyle: { color: element.Index[key].color }
-                });
-            });
-            let ChartResizeMon = new ResizeObserver(entries => {
-                Charts.EchartAreaUpdate();
-            })
-            ChartResizeMon.observe(document.getElementById("ChartArea"));
-            this.Charts.push(Charts);
-            this.ChartResizeMon.push(ChartResizeMon);
+                let ChartResizeMon = new ResizeObserver(entries => {
+                    Charts.EchartAreaUpdate();
+                })
+                ChartResizeMon.observe(document.getElementById("ChartArea"));
+                this.Charts.push(Charts);
+                this.ChartResizeMon.push(ChartResizeMon);
+            }
         });
 
         this.DataUpdator = setInterval(() => {
             this.Charts.forEach(element => {
                 ChartConfigAsJson.configuration.forEach(key => {
-                    if (element.GetCurrentEchartsName() == key.Name) {
-                        let i = 1;
-                        Object.keys(key.Index).forEach(index => {
-                            element.EchartsDataAdd(Number(TargetServer.JSONData[index]), i);
-                            i = i + 1;
-                        });
+                    if (key.enable) {
+                        if (element.GetCurrentEchartsName() == key.Name) {
+                            let i = 1;
+                            Object.keys(key.Index).forEach(index => {
+                                element.EchartsDataAdd(Number(TargetServer.JSONData[index]), i);
+                                i = i + 1;
+                            });
+                        }
                     }
                 });
             });
