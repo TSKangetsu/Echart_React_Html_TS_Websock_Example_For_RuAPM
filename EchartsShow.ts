@@ -80,4 +80,8 @@ export class EchartShowSys {
         this._echartsOption.series.push(option);
         return this._ehcartsSeriesCount;
     }
+
+    GetCurrentEchartsName() {
+        return this._echartsOption.yAxis[0].name;
+    }
 }

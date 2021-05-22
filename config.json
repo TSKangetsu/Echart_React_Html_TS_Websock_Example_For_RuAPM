@@ -1,0 +1,54 @@
+{
+    "configuration": [
+        {
+            "Name": "GryoChart",
+            "IsDynamicY": false,
+            "YMax": 500,
+            "YMin": -500,
+            "Index": {
+                "GRYOPitch": {
+                    "color": "red",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                },
+                "GRYORoll": {
+                    "color": "blue",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                },
+                "GRYOYaw": {
+                    "color": "green",
+                    "type": "line",
+                    "showSymbol": true,
+                    "dataSize": 200
+                }
+            },
+            "width": 700,
+            "height": 200
+        },
+        {
+            "Name": "RealAngle",
+            "IsDynamicY": true,
+            "YMax": 5,
+            "YMin": -5,
+            "Index": {
+                "RealPitch": {
+                    "color": "red",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                },
+                "RealRoll": {
+                    "color": "blue",
+                    "type": "line",
+                    "showSymbol": false,
+                    "dataSize": 200
+                }
+            },
+            "width": 700,
+            "height": 200
+        }
+    ]
+}

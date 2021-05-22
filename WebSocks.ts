@@ -18,7 +18,7 @@ export class NetServerMain {
         return useableID;
     }
 
-    constructor(localport: number, localaddress: string) {
+    constructor(localport: number, localaddress: string, requestSpeedMS: number) {
         let stringbuffer: Array<string> = new Array<string>();
         for (let index = 0; index < 10; index++) {
             stringbuffer[index] = "0";
@@ -31,14 +31,14 @@ export class NetServerMain {
         this.serverMain.onopen = (event) => {
             this.SendClock = setInterval(() => {
                 this.serverMain.send("4350");
-            }, 10);
+            }, requestSpeedMS);
         };
         this.serverMain.onmessage = (event) => {
             this.PreDataExend(<string><unknown>event.data, this.serverMain);
         }
         this.serverMain.onclose = (event) => {
             console.log("has disconnect");
-            this.SendClock.unref();
+            clearInterval(this.SendClock);
         }
     }
 
@@ -51,7 +51,6 @@ export class NetServerMain {
         };
         if (DataExe.slice(0, 4) == "4200") {
             let TmpBuffer: string[] = this.SearchAllMatch_str(DataExe.toString());
-            // console.log(TmpBuffer);
             this.JSONData = JSON.parse(TmpBuffer[2]);
         }
     }
